@@ -393,6 +393,71 @@
 	 </actuator>
   </transmission>
   
+  <!-- FORK BASE -->
+  <link name="fork_base_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+    </inertial>
+			
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://agvs_description/meshes/base.STL"/>
+        </geometry>
+        <material name="DarkGrey" />
+    </visual>
+		
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://agvs_description/meshes/base_convex.dae"  />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="fork_base_joint" type="fixed">
+    <parent link="elevator_link"/>
+    <child link="fork_base_link"/>
+    <origin rpy="0 0 0" xyz="0.61 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- FORK -->
+  <link name="fork_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01" />
+    </inertial>
+			
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://agvs_description/meshes/fork.STL"/>
+        </geometry>
+        <material name="DarkGrey" />
+    </visual>
+		
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://agvs_description/meshes/fork_convex.dae"  />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="fork_joint" type="prismatic">
+    <origin rpy="0 0 0" xyz="0 0 -0.14"/>
+    <parent link="fork_base_link"/>
+    <child link="fork_link"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="1.0" friction="1.0" />
+    <limit effort="1" velocity="0.2" lower="0.0" upper="0.2"/>
+    <safety_controller k_position="20" k_velocity="25" soft_lower_limit="-0.1" soft_upper_limit="0.2" />
+  </joint>
+
   <!-- SICK SENSORS -->
   <!-- Sick Laser Front -->
   <joint name="joint_laser_front" type="fixed">
